@@ -7,6 +7,7 @@ import {
   ReviewTradeTicketPage,
   TradeDecisionResultPage,
 } from "./TicketFlowPages";
+import { TradeTicketDetailsPage } from "./TradeTicketDetailsPage";
 import { TradeTicketsPage } from "./TradeTicketsPage";
 
 const ASSETS = "/assets/";
@@ -483,6 +484,24 @@ export function App() {
     return (
       <>
         <RecordTradePage />
+        <NetworkStatus />
+      </>
+    );
+  }
+
+  if (path === "/trade-tickets/details") {
+    if (!isIdentityVerified()) {
+      return (
+        <>
+          <IdentityVerificationPage returnTo="/trade-tickets/details" />
+          <NetworkStatus />
+        </>
+      );
+    }
+
+    return (
+      <>
+        <TradeTicketDetailsPage />
         <NetworkStatus />
       </>
     );
