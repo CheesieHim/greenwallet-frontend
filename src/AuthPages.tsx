@@ -1,4 +1,9 @@
 import { useState, type FormEvent, type ReactNode } from "react";
+import {
+  getAccountType,
+  setAccountType,
+  type AccountType,
+} from "./identity";
 
 type AuthPageMode = "sign-in" | "sign-up";
 
@@ -61,27 +66,53 @@ function AuthHeader({ mode }: { mode: AuthPageMode }) {
 function AuthenticationForm({ mode }: { mode: AuthPageMode }) {
   const copy = authCopy[mode];
   const [notice, setNotice] = useState("");
+  const [accountType, setSelectedAccountType] = useState<AccountType>(() =>
+    getAccountType(),
+  );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (mode === "sign-up") {
+      setAccountType(accountType);
+    }
     setNotice(
-      "Authentication isn’t connected in this preview. Your information was not sent or stored.",
+      mode === "sign-up"
+        ? "Preview only. Your account type is saved for this browser session; authentication is not connected."
+        : "Authentication isn’t connected in this preview. Your information was not sent or stored.",
     );
   }
 
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
       {mode === "sign-up" && (
-        <label className="auth-field">
-          <span>Name</span>
-          <input
-            type="text"
-            name="name"
-            autoComplete="name"
-            maxLength={100}
-            required
-          />
-        </label>
+        <>
+          <label className="auth-field">
+            <span>Name</span>
+            <input
+              type="text"
+              name="name"
+              autoComplete="name"
+              maxLength={100}
+              required
+            />
+          </label>
+          <label className="auth-field">
+            <span>Account type</span>
+            <select
+              name="accountType"
+              value={accountType}
+              onChange={(event) => {
+                const nextAccountType = event.target.value as AccountType;
+                setSelectedAccountType(nextAccountType);
+                setAccountType(nextAccountType);
+              }}
+              required
+            >
+              <option value="individual">Individual</option>
+              <option value="business">Business</option>
+            </select>
+          </label>
+        </>
       )}
       <label className="auth-field">
         <span>Email address</span>
@@ -120,9 +151,14 @@ function AuthenticationForm({ mode }: { mode: AuthPageMode }) {
         </p>
       )}
       {mode === "sign-up" && (
-        <a className="auth-preview-link" href="/verify-email">
-          Preview email verification
-        </a>
+        <div className="auth-preview-links">
+          <a className="auth-preview-link" href="/verify-email">
+            Preview email verification
+          </a>
+          <a className="auth-preview-link" href="/verify-identity">
+            Preview identity verification
+          </a>
+        </div>
       )}
     </form>
   );

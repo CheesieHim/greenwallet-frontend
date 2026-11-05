@@ -90,20 +90,23 @@ export function TradeTicketsPage() {
             <article className="workspace-info-card">
               <h2>Trade tickets</h2>
               <p>Create a record or reopen a ticket shared with you</p>
+              <a className="workspace-card-action" href="/trade-tickets/review">
+                Review shared ticket
+              </a>
             </article>
             <article className="workspace-info-card">
-              <h2>Account access is not identity verification</h2>
+              <h2>Identity verification is required</h2>
               <p>
-                No GreenWallet participant identity-verification process is
-                connected to this workspace.
+                Individual and business accounts verify with different details
+                before opening a trade ticket.
               </p>
             </article>
           </section>
 
           <p className="workspace-preview-note">
-            Preview only. Sign-in, profile management, identity verification,
-            and trade ticket services are not connected. Nothing is submitted
-            or saved.
+            Preview only. Sign-in, profile management, and trade ticket services
+            are not connected. Identity checks use a dummy service; entered
+            identity details are not sent or stored.
           </p>
           {notice && (
             <p className="workspace-notice" role="status" aria-live="polite">
